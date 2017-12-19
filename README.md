@@ -70,9 +70,23 @@ At this point, we have a library with a single class and a view in it. In the ne
 ### Using the Library
 Start by opening up your Web Application project. On the `_Layout` view, replace the default navigation markup with this:
 ``` C#
-@await Component.InvokeAsync(nameof(ComponentLibrary.NavComponent))
+@await Component.InvokeAsync(nameof(ComponentLibrary.ViewComponents.NavComponent))
 ```
 
 At this point, Intellisense should give you an error because we haven't actually loaded the library yet. 
 
 Add a reference to `ComponentLibrary` from `ComponentLibrary.UI`. 
+
+Now we need to tell the Razor Engine to load Views from inside the library. In `Startup.cs` in the `ConfigureServices` method, add this snippet of code:
+```C#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+
+    services.Configure<RazorViewEngineOptions>(options =>
+    {
+        options.FileProviders.Add(new EmbeddedFileProvider(typeof(ComponentLibrary.ViewComponents.NavComponent)
+            .GetTypeInfo().Assembly));
+    });
+}
+```

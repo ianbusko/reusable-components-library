@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace ComponentsLibrary.UI
 {
@@ -22,6 +25,12 @@ namespace ComponentsLibrary.UI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.FileProviders.Add(new EmbeddedFileProvider(typeof(ComponentLibrary.ViewComponents.NavComponent)
+                    .GetTypeInfo().Assembly));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
