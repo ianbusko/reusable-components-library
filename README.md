@@ -58,4 +58,9 @@ Let's copy the navigation bar out of our default project. Create the file `Views
 </nav>
 ```
 
-Finally, we need to set the class library to embed the Views into the output. 
+Finally, we need to set the class library to embed the Views into the output. Open up the `.csproj` for the library and set it to embed the views using this line:
+```XML
+ <ItemGroup>
+   <EmbeddedResource Include="Views/**/*.cshtml" Pack="true" />
+ </ItemGroup>
+```

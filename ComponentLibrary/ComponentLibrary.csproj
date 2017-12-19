@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <EmbeddedResource Include="Views/**/*.cshtml" Pack="true" />
   </ItemGroup>
 
 </Project>
