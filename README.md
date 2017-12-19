@@ -32,3 +32,30 @@ namespace ComponentLibrary.ViewComponents
 }
 ```
 Note: you'll also need to install the `Microsoft.AspNetCore.Mvc` NuGet package for this to work.
+
+Next, you'll need to create the actual View returned by the ViewComponent. It seems like .NET Core is opinionated about this part: you'll need to put it in the folder `Views\Shared\Components\[ViewComponentName]\Default.cshtml`.
+Let's copy the navigation bar out of our default project. Create the file `Views\Shared\Components\NavComponent\Default.cshtml`, then copy these contents into it:
+```HTML
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ComponentsLibrary.UI</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+```
+
+Finally, we need to set the class library to embed the Views into the output. 
