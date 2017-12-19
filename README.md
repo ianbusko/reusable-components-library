@@ -64,3 +64,5 @@ Finally, we need to set the class library to embed the Views into the output. Op
    <EmbeddedResource Include="Views/**/*.cshtml" Pack="true" />
  </ItemGroup>
 ```
+
+At this point, we have a library with a single class and a view in it. In the next section, we're going to see how to load it into a View.
