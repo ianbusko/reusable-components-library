@@ -66,3 +66,13 @@ Finally, we need to set the class library to embed the Views into the output. Op
 ```
 
 At this point, we have a library with a single class and a view in it. In the next section, we're going to see how to load it into a View.
+
+### Using the Library
+Start by opening up your Web Application project. On the `_Layout` view, replace the default navigation markup with this:
+``` C#
+@await Component.InvokeAsync(nameof(ComponentLibrary.NavComponent))
+```
+
+At this point, Intellisense should give you an error because we haven't actually loaded the library yet. 
+
+Add a reference to `ComponentLibrary` from `ComponentLibrary.UI`. 
