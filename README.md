@@ -90,3 +90,39 @@ public void ConfigureServices(IServiceCollection services)
     });
 }
 ```
+
+At this point, you should be able to run your web application and you will see the same old nav bar at the top. Real neat, but we can make it better.
+
+### Moving Configuration to an Extension
+The first improvement I would make is to remove the verbose code from `ConfigureServices` method and into a method in the library. Right now it's fairly small, but we might want to add more to it later. It would be really nice if the consuming site only had to include one line of code. 
+
+The good news is that we can do that fairly easily. Hop on back to the `ComponentLibrary` project. In the root directory, create a new static class called `Extensions.cs`. Add a single method to it called `AddComponentLibraryViews` that extends `IServiceCollection`. Then, move the logic we wrote to utilize the embedded Razor Views in `Startup.cs` into that method. It should look something like this:
+```C#
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
+
+namespace ComponentLibrary
+{
+    public static class Extensions
+    {
+        public static void AddComponentLibraryViews(this IServiceCollection services)
+        {
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.FileProviders.Add(new EmbeddedFileProvider(typeof(ComponentLibrary.ViewComponents.NavComponent)
+                    .GetTypeInfo().Assembly));
+            });
+        }
+    }
+}
+```
+Note: At this point, the only new NuGet package you should need to add to the `ComponentLibrary` projects is `Microsoft.Extensions.FileProviders.Embedded`.
+
+Now, jump back over to `startup.cs` in your MVC application and replace the above section with this line:
+```C#
+services.AddComponentLibraryViews();
+```
+
+At this point, build your project again and run it to make sure everything still works. Now you only have a single line of code in your Startup Configuration that loads up all the embedded components from the Component Library.
