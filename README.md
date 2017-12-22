@@ -1,11 +1,11 @@
-# reusable-components-library
+# ASP.NET Core 2.0 Reusable View Components Library
 Steps to create a reusable View Component Library in .NET Core 2.0.
 
 ## Requirements
-This class library should accomplish a few goals. It should:
+The goal is to create a library of View Components, scripts and styles that can be packaged and used quickly and easily. Ideally, it could be packaged for use in NuGet.
+There are a few requirements. The library should:
 * Be resuable and self-contained.
-* Be Testable. Components should be strongly-typed.
-* Be Simple. I want to find an easy way to load components into a new site. 
+* Provide strong typing.
 * Provide Support for scripts and styles.
 
 ## Process
@@ -33,7 +33,7 @@ namespace ComponentLibrary.ViewComponents
 ```
 Note: you'll also need to install the `Microsoft.AspNetCore.Mvc` NuGet package for this to work.
 
-Next, you'll need to create the actual View returned by the ViewComponent. It seems like .NET Core is opinionated about this part: you'll need to put it in the folder `Views\Shared\Components\[ViewComponentName]\Default.cshtml`.
+Next, you'll need to create the actual View returned by the ViewComponent. By default, .NET Core will look for a file with this folder structure: `Views\Shared\Components\[ViewComponentName]\Default.cshtml`. You can change this by editing the path of the returned View.
 Let's copy the navigation bar out of our default project. Create the file `Views\Shared\Components\NavComponent\Default.cshtml`, then copy these contents into it:
 ```HTML
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -65,17 +65,17 @@ Finally, we need to set the class library to embed the Views into the output. Op
  </ItemGroup>
 ```
 
-At this point, we have a library with a single class and a view in it. In the next section, we're going to see how to load it into a View.
+At this point, we have a library with a single class and a view in it. In the next section, we're going to see how to load use it.
 
-### Using the Library
-Start by opening up your Web Application project. On the `_Layout` view, replace the default navigation markup with this:
+### Using the Library in a Project
+Start by opening up your Web Application project (`ComponentLibrary.UI`). On the `_Layout` view, replace the default navigation markup with this:
 ``` C#
 @await Component.InvokeAsync(nameof(ComponentLibrary.ViewComponents.NavComponent))
 ```
 
 At this point, Intellisense should give you an error because we haven't actually loaded the library yet. 
 
-Add a reference to `ComponentLibrary` from `ComponentLibrary.UI`. 
+Add a reference to the `ComponentLibrary` project from `ComponentLibrary.UI`. 
 
 Now we need to tell the Razor Engine to load Views from inside the library. In `Startup.cs` in the `ConfigureServices` method, add this snippet of code:
 ```C#
@@ -125,4 +125,10 @@ Now, jump back over to `startup.cs` in your MVC application and replace the abov
 services.AddComponentLibraryViews();
 ```
 
-At this point, build your project again and run it to make sure everything still works. Now you only have a single line of code in your Startup Configuration that loads up all the embedded components from the Component Library.
+Build your project again and run it to make sure everything still works. Now you only have a single line of code in your Startup Configuration that loads up all the embedded components from the Component Library.
+
+### Summary
+At this point, we have a library with a ViewComponent in it. To use it, you need to include a reference to the Extensions class in your `Startup.cs` class and call the Extension method.
+
+### Future Plans
+There are a few more things that we can do at this point to add more value and functionality. The first step is to add a model to our ViewComponent to take advantage of some of ASP.NET's ViewComponent features. The second step is to embed some JavaScript and CSS into the library.
