@@ -7,8 +7,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.0.0" />
     <EmbeddedResource Include="Views/**/*.cshtml" Pack="true" />
+    <EmbeddedResource Include="Scripts/**/*.js" Pack="true">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

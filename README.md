@@ -127,6 +127,17 @@ services.AddComponentLibraryViews();
 
 Build your project again and run it to make sure everything still works. Now you only have a single line of code in your Startup Configuration that loads up all the embedded components from the Component Library.
 
+### Including Scripts
+For the next phase of the project, we're going to add some JavaScript into our class library. The goal here would be that any scripts necessary to make your ViewComponents work should be rolled into the project. 
+The challenge with this step is that you will have to take some extra steps to run this project in the current format that we wouldn't need to do for a NuGet Package.
+
+First, set create a folder in the root of your library called `Scripts`. In that folder, add a JavaScript file called `Script.js` with a `console.log` in it. Then, open up your `.csproj`. Add this line to pack scripts into NuGet and copy to the output directory on build:
+```XML
+<EmbeddedResource Include="Scripts/**/*.js" Pack="true">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+</EmbeddedResource>
+```
+
 ### Summary
 At this point, we have a library with a ViewComponent in it. To use it, you need to include a reference to the Extensions class in your `Startup.cs` class and call the Extension method.
 

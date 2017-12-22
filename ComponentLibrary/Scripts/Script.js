@@ -1,0 +1,1 @@
+﻿console.log("This is loading from a class lib");
