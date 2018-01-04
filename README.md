@@ -1,4 +1,4 @@
-# ASP.NET Core 2.0 Reusable View Components Library
+# Building a reusable ViewComponent in ASP.NET Core 2.0
 Steps to create a reusable View Component Library in .NET Core 2.0.
 
 ## Requirements
@@ -129,17 +129,59 @@ Build your project again and run it to make sure everything still works. Now you
 
 ### Including Scripts
 For the next phase of the project, we're going to add some JavaScript into our class library. The goal here would be that any scripts necessary to make your ViewComponents work should be rolled into the project. 
-The challenge with this step is that you will have to take some extra steps to run this project in the current format that we wouldn't need to do for a NuGet Package.
 
-First, set create a folder in the root of your library called `Scripts`. In that folder, add a JavaScript file called `Script.js` with a `console.log` in it. Then, open up your `.csproj`. Add this line to pack scripts into NuGet and copy to the output directory on build:
+First, set create a folder in the root of your library called `Scripts`. In that folder, add a JavaScript file called `Script.js` with a `console.log` in it. Then, open up your `.csproj`. Add this line to pack your scripts into your assembly:
 ```XML
-<EmbeddedResource Include="Scripts/**/*.js" Pack="true">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-</EmbeddedResource>
+<EmbeddedResource Include="Scripts/**/*.js" Pack="true" />
 ```
 
+Add a reference to the script in the `NavComponent` view:
+```HTML
+<script src="~/Scripts/Script.js"></script>
+```
+
+If you run the site now, you'll notice that the script resource cannot be found. Since it's embedded in the assembly, we have to tell MVC to provide those files if they are requested.
+
+Back in our Extensions class, we need to set up a function that will serve our embedded Static Resources to the web application. In `Extensions.cs`, add this method:
+```C#
+public static void UseComponentLibraryScripts(this IApplicationBuilder builder)
+{
+    var embeddedProvider = new EmbeddedFileProvider(typeof(ComponentLibrary.ViewComponents.NavComponent)
+        .GetTypeInfo().Assembly, "ComponentLibrary.Scripts");
+
+    builder.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = embeddedProvider,
+        RequestPath = new PathString("/Scripts")
+    });
+}
+```
+
+There are a couple of things going on in this function. First we're using the class library's assembly to be the basis of our `EmbeddedFileProvider`. Notice that this time around, we specified the default namespace `ComponentLibrary.Scripts`, which is the folder path to the Scripts folder. 
+Next, we called the `useStaticFiles` method on the builder. We're supplying our embeddedProvider to specify where the files are coming from, and we supply a RequestPath that will tell us what path the resource is located in. For example, we could set that value to `/Scripts/Lib/` and the directory of `Script.js` would be `http://website/Scripts/Lib/Script.js`.
+Back in our `Startup.cs` class, add a call to our new extension method in `Configure`:
+```C#
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+	...
+
+    app.UseStaticFiles();
+    app.UseComponentLibraryScripts();
+
+	...
+}
+```
+
+Now build the solution and run your site. In the console, you should see the message that was added into `Script.js`.
+If you want to include other static resources (like styles or images), you would use this same steps. You just need to embed them in the assembly and then load them into the application using a Static File Provider. 
+
 ### Summary
-At this point, we have a library with a ViewComponent in it. To use it, you need to include a reference to the Extensions class in your `Startup.cs` class and call the Extension method.
+At this point, we have a library with a ViewComponent and some JavaScript in it. To use it, you need to include a reference to the Extensions class in your `Startup.cs` class and include on line in `Configure` and another line in `Startup`.
 
 ### Future Plans
-There are a few more things that we can do at this point to add more value and functionality. The first step is to add a model to our ViewComponent to take advantage of some of ASP.NET's ViewComponent features. The second step is to embed some JavaScript and CSS into the library.
+I have a few more things I want to add to my ViewComponents library:
+* Develop a class-based system of strongly-typed ViewComponents
+* Develop TagHelpers to wrap common markup structures
+* Add Bundling/Minification and package scripts/styles with their ViewComponents
+* Embed scripts/styles into the ViewComponents themselves
+* Restructure the ViewComponent locations to make the folder structures less verbose.

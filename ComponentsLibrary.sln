@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComponentLibrary", "ComponentLibrary\ComponentLibrary.csproj", "{E0F88BDB-1DCC-46CE-8DAA-C9DDA34EEDEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentLibrary", "ComponentLibrary\ComponentLibrary.csproj", "{E0F88BDB-1DCC-46CE-8DAA-C9DDA34EEDEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComponentsLibrary.UI", "ComponentsLibrary.UI\ComponentsLibrary.UI.csproj", "{F0334D14-439C-4E64-B8D6-EF9D4A0A9A23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentsLibrary.UI", "ComponentsLibrary.UI\ComponentsLibrary.UI.csproj", "{F0334D14-439C-4E64-B8D6-EF9D4A0A9A23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -39,6 +39,7 @@ namespace ComponentsLibrary.UI
             }
 
             app.UseStaticFiles();
+            app.UseComponentLibraryScripts();
 
             app.UseMvc(routes =>
             {

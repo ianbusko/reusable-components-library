@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Description>This is a sample View Component Library.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,9 +13,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.0.0" />
     <EmbeddedResource Include="Views/**/*.cshtml" Pack="true" />
-    <EmbeddedResource Include="Scripts/**/*.js" Pack="true">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Scripts/**/*.js" Pack="true" />
   </ItemGroup>
 
 </Project>
